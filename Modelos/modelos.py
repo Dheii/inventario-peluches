@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float
-from models.database import base
+from BdD.basededatos import base
 
 class Producto(base):
 
