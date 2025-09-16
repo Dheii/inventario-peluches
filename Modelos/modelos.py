@@ -1,23 +1,27 @@
-from sqlalchemy import Column, Integer, String, Float
-from BdD.basededatos import base
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+
+from BdD.basededatos import base# importas la Base que definiste (la nombraste 'base')
+
 
 class Producto(base):
+    __tablename__ = "productos"
 
-	_tablename_= "PRODUCTOS"
+    id_peluche = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    nombre = Column(String(100), nullable=False)
+    categoria = Column(String(50), nullable=False)
+    tamano = Column(String(50), nullable=False)          # evité usar 'ñ' en el identificador
+    precio_unitario = Column(Float, nullable=False)
+    cantidad_stock = Column(Integer, nullable=False, default=0)
+    fecha_ingreso = Column(DateTime, nullable=False)
 
-	id_peluche= Column(Integer, primary_key= True, index= True)
-	nombre= Column(String, nullable= False)
-	categoria= Column(String, nullable=False)
-	tamaño= Column(String, nullable=False)
-	precio_unitario= Column(Float, nullable=False)
-	cantidad_stock= Column(Int, nullable=False)
-	fecha_ingreso= Column(String, nullable= False)
+    # Relación opcional con movimientos
+    
 
-class MOVIMIENTO_INVENTARIO(base):
-	
-	_tablename_= "MOVIMIENTO DE INVENTARIO"
 
-        tipo= Column(String, nullable= False)
-        cantidad= Column(Int, nullable= False)
-        Fecha= Column(Integer, primary_key= index= True)
-        tamaño= Column(String, nullable=False)
+class MovimientoInventario(base):
+    __tablename__ = "movimientos_inventario"
+
+    id_movimiento = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    tipo = Column(String(20), nullable=False)     # por ejemplo: 'entrada' o 'salida'
+    cantidad = Column(Integer, nullable=False)
+    fecha = Column(DateTime, nullable=False)
