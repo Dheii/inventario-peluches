@@ -1,20 +1,17 @@
 import sys
 import os
 
-# 🔹 Agregar la carpeta raíz del proyecto al path
-sys.path.append(r"C:\Users\trole\Documents\inventario-peluches")
-
+sys.path.append(r"C:\Users\Admin\Documents\inventario-peluches")
 
 import argparse
 from BdD.basededatos import SessionLocal
 from Managers.producto_manager import ProductoManager
 from Modelos.modelos import MovimientoInventario
 
-# Crear sesión y manager
+
 db = SessionLocal()
 manager = ProductoManager(db)
 
-# Funciones para los comandos
 def cmd_agregar(args):
     producto = manager.agregar_producto(
         nombre=args.nombre,
@@ -58,11 +55,10 @@ def cmd_eliminar(args):
     else:
         print(f"No se encontró el producto con id {args.id}.")
 
-# Configuración de argparse
 parser = argparse.ArgumentParser(description="Gestión de inventario de peluches")
 subparsers = parser.add_subparsers()
 
-# Comando agregar
+#para agregar
 parser_agregar = subparsers.add_parser("agregar", help="Agregar un nuevo producto")
 parser_agregar.add_argument("nombre", type=str)
 parser_agregar.add_argument("categoria", type=str)
@@ -71,32 +67,30 @@ parser_agregar.add_argument("precio", type=float)
 parser_agregar.add_argument("cantidad", type=int)
 parser_agregar.set_defaults(func=cmd_agregar)
 
-# Comando listar
+#para listar
 parser_listar = subparsers.add_parser("listar", help="Listar todos los productos")
 parser_listar.set_defaults(func=cmd_listar)
 
-# Comando actualizar stock
+#para actualizar mi stock
 parser_actualizar = subparsers.add_parser("actualizar", help="Actualizar stock de un producto")
 parser_actualizar.add_argument("id", type=int)
 parser_actualizar.add_argument("cantidad", type=int)
 parser_actualizar.add_argument("tipo", type=str, choices=["entrada","salida"])
 parser_actualizar.set_defaults(func=cmd_actualizar)
 
-# Comando mostrar movimientos
+#mostrar movimientos
 parser_movimientos = subparsers.add_parser("movimientos", help="Mostrar movimientos de inventario")
 parser_movimientos.set_defaults(func=cmd_movimientos)
 
-# Comando eliminar
+#para eliminar
 parser_eliminar = subparsers.add_parser("eliminar", help="Eliminar un producto")
 parser_eliminar.add_argument("id", type=int)
 parser_eliminar.set_defaults(func=cmd_eliminar)
 
-# Ejecutar el comando
 args = parser.parse_args()
 if hasattr(args, "func"):
     args.func(args)
 else:
     parser.print_help()
 
-# Cerrar sesión al final
 db.close()
