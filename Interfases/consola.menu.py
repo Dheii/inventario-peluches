@@ -2,7 +2,7 @@ import sys
 import os
 from datetime import datetime
 
-sys.path.append(r"C:\Users\trole\Documents\proyectos\inventario-peluches")
+sys.path.append(r"C:\Users\Admin\Documents\PROY\inventario-peluches")
 
 from BdD.basededatos import SessionLocal
 from Managers.producto_manager import ProductoManager
@@ -24,7 +24,7 @@ def main():
     try:
         while True:
             menu()
-            opcion = input("Selecciona una opción: ").strip()
+            opcion = input("Que desea hacer?: ").strip()
 
             if opcion == "1":
                 nombre = input("Nombre: ")
