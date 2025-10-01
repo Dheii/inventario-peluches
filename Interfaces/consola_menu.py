@@ -2,7 +2,6 @@ import sys
 import os
 from datetime import datetime
 
-sys.path.append(r"C:\Users\Admin\Documents\PROY\inventario-peluches")
 
 from BdD.basededatos import SessionLocal
 from Managers.producto_manager import ProductoManager
