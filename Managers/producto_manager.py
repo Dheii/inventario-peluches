@@ -5,7 +5,6 @@ class ProductoManager:
     def __init__(self, db):
         self.db = db
 
-    # Agrega peluches
     def agregar_producto(self, nombre, categoria, tamano, precio, cantidad):
         nuevo = Producto(
             nombre=nombre,
@@ -20,11 +19,45 @@ class ProductoManager:
         self.db.refresh(nuevo)
         return nuevo
 
-    # Lista de peluches (inventario p)
     def listar_productos(self):
         return self.db.query(Producto).all()
 
-    # Actualiza entradads y salidas
+    def actualizar_nombre(self, id_peluche, nuevo_nombre):
+        producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
+        if not producto:
+            raise ValueError("Producto no encontrado")
+        producto.nombre = nuevo_nombre
+        self.db.commit()
+        self.db.refresh(producto)
+        return producto
+
+    def actualizar_precio(self, id_peluche, nuevo_precio):
+        producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
+        if not producto:
+            raise ValueError("Producto no encontrado")
+        producto.precio_unitario = nuevo_precio
+        self.db.commit()
+        self.db.refresh(producto)
+        return producto
+
+    def actualizar_categoria(self, id_peluche, nueva_categoria):
+        producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
+        if not producto:
+            raise ValueError("Producto no encontrado")
+        producto.categoria = nueva_categoria
+        self.db.commit()
+        self.db.refresh(producto)
+        return producto
+
+    def actualizar_tamano(self, id_peluche, nuevo_tamano):
+        producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
+        if not producto:
+            raise ValueError("Producto no encontrado")
+        producto.tamano = nuevo_tamano
+        self.db.commit()
+        self.db.refresh(producto)
+        return producto
+
     def actualizar_stock(self, id_peluche, cantidad, tipo="entrada"):
         producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
         if not producto:
@@ -39,7 +72,6 @@ class ProductoManager:
                 raise ValueError("Stock insuficiente")
         else:
             raise ValueError("Tipo de movimiento inválido")
-
         movimiento = MovimientoInventario(
             producto_id=producto.id_peluche,
             tipo=tipo,
@@ -47,17 +79,14 @@ class ProductoManager:
             fecha=datetime.now()
         )
         self.db.add(movimiento)
-
         try:
             self.db.commit()
             self.db.refresh(producto)
         except Exception as e:
             self.db.rollback()
             raise e
-
         return producto
 
-    # Quita el producto
     def eliminar_producto(self, id_peluche):
         producto = self.db.query(Producto).filter_by(id_peluche=id_peluche).first()
         if producto:
