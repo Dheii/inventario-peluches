@@ -7,10 +7,9 @@ from textual import events
 from textual.widgets import ListView
 
 class EliminarProductoScreen(Screen):
-    """Pantalla para eliminar productos desde la TUI"""
 
     BINDINGS = [
-        ("escape", "pop_screen", "Atrás")  # Regresar con ESC
+        ("escape", "pop_screen", "Atrás")
     ]
 
     def __init__(self):
@@ -29,16 +28,13 @@ class EliminarProductoScreen(Screen):
         self.query_one("#input_delete", Input).focus()
 
     async def action_pop_screen(self) -> None:
-        """Acción llamada por la binding 'pop_screen' (Escape)."""
         await self.app.pop_screen()
-        # devolver foco al ListView del menú principal si existe
         if self.app.screen_stack:
             parent = self.app.screen_stack[-1]
             try:
                 menu = parent.query_one("#menu", ListView)
                 menu.focus()
             except Exception:
-                # si no tiene ListView, ignorar
                 pass
 
     async def on_input_submitted(self, event: Input.Submitted):

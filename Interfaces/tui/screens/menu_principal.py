@@ -40,6 +40,5 @@ class MenuPrincipalScreen(Screen):
             self.app.exit()
             
     async def on_mount(self):
-    # Al montar, asegurarse de que el ListView tenga foco
         menu = self.query_one("#menu", ListView)
         menu.focus()

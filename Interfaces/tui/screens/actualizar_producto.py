@@ -7,7 +7,6 @@ from BdD.basededatos import SessionLocal
 from Managers.producto_manager import ProductoManager
 
 class ActualizarProductoScreen(Screen):
-    """Pantalla para actualizar productos con menú interactivo"""
 
     BINDINGS = [("escape", "pop_screen", "Atrás")]
 
@@ -40,17 +39,14 @@ class ActualizarProductoScreen(Screen):
         input_widget.styles.display = "none"
         yield input_widget
 
-    # ----------- CAPTURA ESC DESDE INPUT -----------
     async def on_key(self, event: events.Key):
         if event.key == "escape":
             self.app.pop_screen()
-
-            main_menu_screen = self.app.screen_stack[-1] # obtiene la pantalla actual 
+            main_menu_screen = self.app.screen_stack[-1]
             menu_list = main_menu_screen.query_one("#menu", ListView) 
             menu_list.focus() 
             return
 
-    # ----------- SELECCIÓN DEL MENÚ -----------
     async def on_list_view_selected(self, event: ListView.Selected):
         self.selected_option = event.item.id
         self.current_step = "id"
@@ -63,12 +59,10 @@ class ActualizarProductoScreen(Screen):
 
         self.query_one("#mensaje", Static).update("")
 
-    # ----------- PROCESAR INPUT -----------
     async def on_input_submitted(self, message: Input.Submitted):
         value = message.value.strip()
         input_widget = self.query_one("#input_update", Input)
 
-        # ---- Paso 1: ID ----
         if self.current_step == "id":
             try:
                 self.product_id = int(value)
@@ -83,13 +77,12 @@ class ActualizarProductoScreen(Screen):
                 input_widget.placeholder = "Cantidad"
             else:
                 self.current_step = "nuevo_valor"
-                input_widget.placeholder = "Nuevo valor"
+                input_widget.placeholder = "Nuevo Dato"
 
             input_widget.value = ""
             input_widget.focus()
             return
 
-        # ---- Paso 2: NUEVO VALOR (excepto cantidad) ----
         if self.current_step == "nuevo_valor":
             try:
                 if self.selected_option == "nombre":
@@ -111,7 +104,6 @@ class ActualizarProductoScreen(Screen):
             self.query_one("#menu", ListView).focus()
             return
 
-        # ---- Paso 2A: Cantidad ----
         if self.current_step == "cantidad_valor":
             try:
                 self.cantidad = int(value)
@@ -127,7 +119,6 @@ class ActualizarProductoScreen(Screen):
             input_widget.focus()
             return
 
-        # ---- Paso 3: Tipo de movimiento ----
         if self.current_step == "cantidad_tipo":
             tipo = value.lower()
 

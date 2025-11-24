@@ -43,11 +43,10 @@ class AgregarProductoScreen(Screen):
         value = event.value.strip()
         event.input.value = ""
 
-        # Validar por paso
         try:
-            if self.step == 3:   # Cantidad
+            if self.step == 3:  
                 self.data[self.mensajes[self.step]] = int(value)
-            elif self.step == 4: # Precio
+            elif self.step == 4: 
                 self.data[self.mensajes[self.step]] = float(value)
             else:
                 if not value:
@@ -58,10 +57,8 @@ class AgregarProductoScreen(Screen):
             self.output.update("[red]Valor inválido, intente nuevamente[/red]")
             return
 
-        # Pasar al siguiente
         self.step += 1
 
-        # Si terminó todo → guardar
         if self.step >= len(self.mensajes):
 
             producto = self.manager.agregar_producto(
@@ -77,15 +74,12 @@ class AgregarProductoScreen(Screen):
                 f"(ID {producto.id_peluche})[/green]"
             )
 
-            # Preparar para agregar otro
             self.data = {}
             self.step = 0
             self.show_prompt()
             return
 
-        # Mostrar siguiente mensaje
         self.show_prompt()
 
     def on_show(self):
-        """Asegura que el input reciba foco al regresar a la pantalla."""
         self.input.focus()
